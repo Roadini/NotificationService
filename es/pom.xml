@@ -20,7 +20,7 @@
   <repository>
       <id>project-common</id>
       <name>Project Common</name>
-      <url>https://github.com/Roadini/NotificationService/blob/master/smackx-pubsub.0.6.jar</url>
+      <url>https://github.com/Roadini/NotificationService/blob/master/smackx-pubsub-0.6.jar</url>
       </repository>
   </repositories>
   <dependencies>
