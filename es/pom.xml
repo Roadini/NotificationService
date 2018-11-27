@@ -13,9 +13,16 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
   </properties>
+  <repositories>
+  <repository>
+      <id>project-common</id>
+      <name>Project Common</name>
+      <url>https://github.com/Roadini/NotificationService/blob/master/smackx-pubsub-0.6.jar</url>
+      </repository>
+  </repositories>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
