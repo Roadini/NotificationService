@@ -18,8 +18,9 @@ to do
 Utilização do plugin RESTApi e User Service do servidor Openfire para gestão de utilizadores
 
 Basic Auth
-username: admin
-password: admin
+
+*username: admin
+*password: admin
 
 ### Adicionar utilizador
 
