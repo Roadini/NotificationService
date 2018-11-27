@@ -17,15 +17,19 @@ to do
 
 Utilização do plugin RESTApi e User Service do servidor Openfire para gestão de utilizadores
 
+Basic Auth
+username: admin
+password: admin
+
 ### Adicionar utilizador
 
 POST http://myserver:9090/plugins/restapi/v1/users
 ```
 {
-    "username": "admin",
-    "password": "p4ssword",
-    "name": "Administrator",
-    "email": "admin@example.com”
+    "username": "username",
+    "password": "password",
+    "name": "User",
+    "email": "user@example.com”
 }
 ```
 ### Remover utilizador
