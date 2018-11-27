@@ -17,10 +17,7 @@ to do
 
 Utilização do plugin RESTApi e User Service do servidor Openfire para gestão de utilizadores
 
-Basic Auth
-
-*username: admin
-*password: admin
+Basic Auth antes de ligação, username: admin / password: ___
 
 ### Adicionar utilizador
 
@@ -35,10 +32,10 @@ POST http://myserver:9090/plugins/restapi/v1/users
 ```
 ### Remover utilizador
 
-DELETE http://myserver:9090/plugins/restapi/v1/users/{username}
+DELETE http://localhost:9090/plugins/restapi/v1/users/{username}
 
 ### Alterar utilizador 
-PUT http://myserver:9090/plugins/restapi/v1/users/{oldUsername}
+PUT http://localhost:9090/plugins/restapi/v1/users/{oldUsername}
 
 ```
 {
