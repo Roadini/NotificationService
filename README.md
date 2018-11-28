@@ -47,6 +47,14 @@ PUT http://localhost:9090/plugins/restapi/v1/users/{oldUsername}
 ```
 ## Websocket (Jetty WebServer)
 
+### Docker
+
+Executar
+
+```
+$docker run -p 8040:8040 notification:final
+```
+
 ### Efectuar Log in e get de mensagens offline
 
 URL:ws://localhost:8040/websocket
