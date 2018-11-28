@@ -21,7 +21,7 @@ Basic Auth antes de ligação, username: admin / password: ___
 
 ### Adicionar utilizador
 
-POST http://myserver:9090/plugins/restapi/v1/users
+POST http://engserv-1-aulas.ws.atnog.av.it.pt/plugins/restapi/v1/users
 ```
 {
     "username": "username",
@@ -32,10 +32,10 @@ POST http://myserver:9090/plugins/restapi/v1/users
 ```
 ### Remover utilizador
 
-DELETE http://localhost:9090/plugins/restapi/v1/users/{username}
+DELETE http://engserv-1-aulas.ws.atnog.av.it.pt/plugins/restapi/v1/users/{username}
 
 ### Alterar utilizador 
-PUT http://localhost:9090/plugins/restapi/v1/users/{oldUsername}
+PUT http://engserv-1-aulas.ws.atnog.av.it.pt/plugins/restapi/v1/users/{oldUsername}
 
 ```
 {
