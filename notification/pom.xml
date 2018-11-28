@@ -12,6 +12,13 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  	<!-- Docker configs -->
+  	<maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <application.mainclass>websocket.notification.Main</application.mainclass>
+    <application.dependencies>lib</application.dependencies>
+    <application.workdir>application</application.workdir>
+  <!-- Docker configs -->
   </properties>
 
   <dependencies>
@@ -74,4 +81,64 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <!-- DOCKER -->
+  <build>
+  <plugins>
+  <plugin>
+    <artifactId>maven-dependency-plugin</artifactId>
+    <version>3.0.1</version>
+    <executions>
+        <execution>
+            <phase>prepare-package</phase>
+            <goals>
+                <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+                <includeScope>runtime</includeScope>
+                <outputDirectory>${project.build.directory}/${application.dependencies}</outputDirectory>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+
+<plugin>
+    <artifactId>maven-jar-plugin</artifactId>
+    <version>3.0.2</version>
+    <configuration>
+        <archive>
+            <manifest>
+                <addClasspath>true</addClasspath>
+                <classpathPrefix>${application.dependencies}</classpathPrefix>
+                <mainClass>${application.mainclass}</mainClass>
+                <!-- match with base version string naming of Maven Dependency Plugin -->
+                <useUniqueVersions>false</useUniqueVersions>
+            </manifest>
+        </archive>
+    </configuration>
+</plugin>
+<plugin>
+    <artifactId>maven-resources-plugin</artifactId>
+    <version>3.0.2</version>
+    <executions>
+        <execution>
+            <phase>generate-resources</phase>
+            <goals>
+                <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+                <outputDirectory>${project.build.directory}</outputDirectory>
+                <resources>
+                    <resource>
+                        <directory>src/main/docker</directory>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+  </plugins>
+  </build>
+  <!-- DOCKER -->
+  
 </project>
