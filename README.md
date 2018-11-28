@@ -65,7 +65,7 @@ URL:ws://localhost:8040/websocket
             "Data": {
                 "UserName": "your_username",
                 "Password": "your_password",
-                "Server": "127.0.0.1"
+                "Server": "your_host"
              }
 }
 ```
