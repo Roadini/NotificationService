@@ -55,17 +55,14 @@ import websocket.notification.util.Data;
 import websocket.notification.util.Message;
 
 
-public class XmppWebSocket implements WebSocket.OnTextMessage,
-       MessageListener{
+public class XmppWebSocket implements WebSocket.OnTextMessage, MessageListener{
+
 	       protected Connection connection;
 	       protected XMPPConnection talk;
 	       private PubSubManager manager;
 	       private LeafNode ownernode;
 	       private ConfigureForm form;
 	       private String userToken;
-	       private CookieManager cookieManager = new CookieManager();
-
-
 
 	       public void onOpen(Connection arg0) {
 		       this.connection = arg0;
@@ -107,15 +104,9 @@ public class XmppWebSocket implements WebSocket.OnTextMessage,
 
 				       System.out.println();
 
-				       //System.out.println(String.valueOf(new HttpCookie("jwt",this.userToken)));
-				       //cookieManager.getCookieStore().add(null, new HttpCookie("jwt",this.userToken));
-
-				       //con.setRequestProperty("Cookie", String.valueOf(cookieManager.getCookieStore().getCookies()));
 				       con.setRequestProperty("Cookie", "jwt="+this.userToken);
 
 				       System.out.println(con.getResponseCode());
-
-				       String response = con.getResponseMessage();
 
 				       BufferedReader in = new BufferedReader(
 						       new InputStreamReader(con.getInputStream()));
@@ -185,18 +176,28 @@ public class XmppWebSocket implements WebSocket.OnTextMessage,
 	       }
 
 	       class ItemEventCoordinator  implements ItemEventListener {
+
 		       public void handlePublishedItems(ItemPublishEvent items) {
 			       ObjectMapper mapper = new ObjectMapper();
+
 
 			       System.out.println("Notificação");
 			       System.out.println("Item count: " + items.getItems().size());
 
 			       ArrayList<String> frompayload = parseXml(items.getItems().get(0).toString());
+                   Message sndMsg = new Message("publish", new Data(frompayload.get(1),frompayload.get(0)));
 
 			       System.out.println(parseXml(items.getItems().get(0).toString()));
 			       System.out.println(frompayload.get(1) + " publicou " +frompayload.get(0)+" no teu perfil");
+                   try {
+                       connection.sendMessage(mapper.writeValueAsString(sndMsg));
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
 		       }
+
 	       }
+
 	       public ArrayList<String> parseXml(String message) {
 
 		       ArrayList<String> content = new ArrayList<String>();
