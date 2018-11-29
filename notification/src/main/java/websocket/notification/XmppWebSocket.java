@@ -65,25 +65,26 @@ MessageListener{
 
 	public void onOpen(Connection arg0) {
 		this.connection = arg0;
-		System.out.println("Open v0");
+		System.out.println("Open v2");
 	}
 
 	public void onClose(int arg0, String arg1) {
 		talk.disconnect();
-		
 	}
 
 	public void onMessage(String arg0) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 
-            URL url = new URL("http://engserv-1-aulas.ws.atnog.av.it.pt/auth/v1/getselfuser");
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("POST");
+		System.out.println("Pim");
+            	URL url = new URL("http://engserv-1-aulas.ws.atnog.av.it.pt/auth/v1/getselfuser");
+            	HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            	con.setRequestMethod("POST");
 
 			Message recMsg = mapper.readValue(arg0, Message.class);
 			
 			if (recMsg.getType().equals("login")) {
+				System.out.println("PAM");
 
 				SmackConfiguration.setPacketReplyTimeout(5000);
 				ConnectionConfiguration config = new ConnectionConfiguration(
@@ -92,17 +93,26 @@ MessageListener{
 
 				talk = new XMPPConnection(config);
 				talk.connect();
+				System.out.println("PUM");
+
 
 				// Get user information from token
-                this.userToken = recMsg.getData().getToken();
+                		this.userToken = recMsg.getData().getToken();
 
-                con.setRequestProperty("Cookie", String.valueOf(new HttpCookie("jwt",this.userToken)));
+				System.out.println(this.userToken);
+				System.out.println();
+				System.out.println(String.valueOf(new HttpCookie("jwt",this.userToken)));
+                		con.setRequestProperty("Cookie", String.valueOf(new HttpCookie("jwt",this.userToken)) + ";");
 
-                String response = con.getResponseMessage();
-                JsonElement jelement = new JsonParser().parse(response);
-                JsonObject  jobject = jelement.getAsJsonObject();
-                String id = jobject.get("id").getAsString();
-                String pass = jobject.get("id").getAsString() + jobject.get("email").getAsString();
+				System.out.println(con.getResponseCode());
+
+                		String response = con.getResponseMessage();
+				System.out.println(response);
+
+                		JsonElement jelement = new JsonParser().parse(response);
+                		JsonObject  jobject = jelement.getAsJsonObject();
+                		String id = jobject.get("id").getAsString();
+                		String pass = jobject.get("id").getAsString() + jobject.get("email").getAsString();
 
 
 				talk.login(id,pass);
