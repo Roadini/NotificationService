@@ -1,6 +1,7 @@
 package websocket.notification;
 
 import java.io.IOException;
+import java.net.CookieManager;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -60,6 +61,7 @@ MessageListener{
 	private LeafNode ownernode;
 	private ConfigureForm form;
 	private String userToken;
+	private CookieManager cookieManager = new CookieManager();
 
 	
 
@@ -77,7 +79,7 @@ MessageListener{
 		try {
 
 		System.out.println("Pim");
-            	URL url = new URL("http://engserv-1-aulas.ws.atnog.av.it.pt/auth/v1/getselfuser");
+            	URL url = new URL("http://auth_api:3000/auth/v1/getselfuser");
             	HttpURLConnection con = (HttpURLConnection) url.openConnection();
             	con.setRequestMethod("POST");
 
@@ -100,11 +102,16 @@ MessageListener{
                 		this.userToken = recMsg.getData().getToken();
 
 				System.out.println(this.userToken);
-				System.out.println();
-				System.out.println(String.valueOf(new HttpCookie("jwt",this.userToken)));
-                		con.setRequestProperty("Cookie", String.valueOf(new HttpCookie("jwt",this.userToken)) + ";");
 
-				System.out.println(con.getResponseCode());
+				System.out.println();
+
+				//System.out.println(String.valueOf(new HttpCookie("jwt",this.userToken)));
+                		//cookieManager.getCookieStore().add(null, new HttpCookie("jwt",this.userToken));
+
+                		//con.setRequestProperty("Cookie", String.valueOf(cookieManager.getCookieStore().getCookies()));
+				con.setRequestProperty("Cookie", "jwt="+this.userToken);
+
+ 				System.out.println(con.getResponseCode());
 
                 		String response = con.getResponseMessage();
 				System.out.println(response);
