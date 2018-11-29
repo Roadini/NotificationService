@@ -126,9 +126,9 @@ MessageListener{
                 }
                 in.close();
 
-				System.out.println(response);
+				System.out.println(content.toString());
 
-				JsonElement jelement = new JsonParser().parse(response);
+				JsonElement jelement = new JsonParser().parse(content.toString());
 				JsonObject  jobject = jelement.getAsJsonObject();
 				String id = jobject.get("id").getAsString();
 				String pass = jobject.get("id").getAsString() + jobject.get("email").getAsString();
