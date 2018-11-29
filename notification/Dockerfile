@@ -16,4 +16,3 @@ ADD src /code/src
 RUN ["mvn", "package"]
 
 EXPOSE 8040
-CMD ["/usr/lib/jvm/java-8-openjdk-amd64/bin/java", "-jar", "target/notification-0.0.1-SNAPSHOT.jar"]
