@@ -1,6 +1,7 @@
 package websocket.notification;
 
 import java.io.IOException;
+import java.net.CookieManager;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -60,6 +61,7 @@ MessageListener{
 	private LeafNode ownernode;
 	private ConfigureForm form;
 	private String userToken;
+	private CookieManager cookieManager = new CookieManager();
 
 	
 
@@ -95,8 +97,9 @@ MessageListener{
 
 				// Get user information from token
                 this.userToken = recMsg.getData().getToken();
+                cookieManager.getCookieStore().add(null, new HttpCookie("jwt",this.userToken));
 
-                con.setRequestProperty("Cookie", String.valueOf(new HttpCookie("jwt",this.userToken)));
+                con.setRequestProperty("Cookie", String.valueOf(cookieManager.getCookieStore().getCookies()));
 
                 String response = con.getResponseMessage();
                 JsonElement jelement = new JsonParser().parse(response);
