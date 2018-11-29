@@ -3,64 +3,35 @@ package websocket.notification.util;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Data {
-	@JsonProperty("Server")
+	@JsonProperty("server")
 	private String server;
 	
-	@JsonProperty("UserName")
-	private String userName;
+	@JsonProperty("token")
+	private String token;
+
+	@JsonProperty("to")
+	private int to;
 	
-	@JsonProperty("Password")
-	private String password;
-	
-	@JsonProperty("From")
-	private String from;
-	
-	@JsonProperty("To")
-	private String to;
-	
-	@JsonProperty("Text")
+	@JsonProperty("text")
 	private String text;
 
-	public Data(String from,String to, String text) {
-		super();
-		this.from = from;
+	public Data(int to, String text) {
 		this.to= to;
 		this.text = text;
 	}
 
-	public Data() {
-		super();
-	}
-
-	public String getServer() {
-		return server;
-	}
-
-	public void setServer(String server) {
+	public Data(String token, String server){
+		this.token = token;
 		this.server = server;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getServer() {
+		return this.server;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+	public String getToken() { return this.token; }
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getFrom() {
-		return this.from;
-	}
-	
-	public String getTo() {
+	public int getTo() {
 		return this.to;
 	}
 

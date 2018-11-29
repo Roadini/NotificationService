@@ -1,6 +1,9 @@
 package websocket.notification;
 
 import java.io.IOException;
+import java.net.HttpCookie;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,6 +11,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -53,6 +59,7 @@ MessageListener{
 	private PubSubManager manager;
 	private LeafNode ownernode;
 	private ConfigureForm form;
+	private String userToken;
 
 	
 
@@ -69,6 +76,11 @@ MessageListener{
 	public void onMessage(String arg0) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
+
+            URL url = new URL("http://engserv-1-aulas.ws.atnog.av.it.pt/auth/v1/getselfuser");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+
 			Message recMsg = mapper.readValue(arg0, Message.class);
 			
 			if (recMsg.getType().equals("login")) {
@@ -80,24 +92,31 @@ MessageListener{
 
 				talk = new XMPPConnection(config);
 				talk.connect();
-				talk.login(recMsg.getData().getUserName(), recMsg.getData()
-						.getPassword());
+
+				// Get user information from token
+                this.userToken = recMsg.getData().getToken();
+
+                con.setRequestProperty("Cookie", String.valueOf(new HttpCookie("jwt",this.userToken)));
+
+                String response = con.getResponseMessage();
+                JsonElement jelement = new JsonParser().parse(response);
+                JsonObject  jobject = jelement.getAsJsonObject();
+                String id = jobject.get("id").getAsString();
+                String pass = jobject.get("id").getAsString() + jobject.get("email").getAsString();
+
+
+				talk.login(id,pass);
+
 				manager= new PubSubManager(talk, "pubsub.myserverxmpp");
 				
 				try {
-					ownernode = (LeafNode) manager.getNode(("node"+recMsg.getData().getUserName()));
-					
-					
-					
-					
-					
+					ownernode = (LeafNode) manager.getNode(("node_p"+id));
+
 					for (int i = 0; i < ownernode.getItems().size(); i++) {
 						ArrayList<String> frompayload = parseXml(ownernode.getItems().get(i).toString());
 						System.out.println(frompayload.get(1) + " publicou " +frompayload.get(0)+" no teu perfil");
-						//System.out.println(ownernode.getItems().get(i));
 					}
-					//System.out.println(ownernode.getItems().get(1));
-					//System.out.println(ownernode.getItems().size());
+
 				} catch (XMPPException e) {
 					/*configure node properties*/
 					form = new ConfigureForm(FormType.submit);
@@ -107,63 +126,35 @@ MessageListener{
 					form.setAccessModel(AccessModel.open);
 					form.setPublishModel(PublishModel.open);
 					
-					ownernode = (LeafNode) manager.createNode("node"+recMsg.getData().getUserName(),form);
-					ownernode.subscribe(recMsg.getData().getUserName()+"@myserverxmpp");
+					ownernode = (LeafNode) manager.createNode("node_p"+id,form);
+					ownernode.subscribe(id+"@myserverxmpp");
 				}
 				
 				ownernode.addItemEventListener(new ItemEventCoordinator());
-				System.out.println("PUMBAAA");
+
+				System.out.println("Login Successful");
 			
 			} else if (recMsg.getType().equals("publish")) {
 				
-				recMsg.getData();
-				LeafNode nodeToPublish =(LeafNode) manager.getNode("node"+recMsg.getData().getTo());
+				LeafNode nodeToPublish =(LeafNode) manager.getNode("node_p"+recMsg.getData().getTo());
+
 				String Xmltosend="<message><body>" + recMsg.getData().getText() +"</body><from>"+ talk.getAccountManager().getAccountAttribute("name") +"</from>"+ "</message>";
 				
-				SimplePayload payload = new SimplePayload("message", "pubusb:node"+recMsg.getData().getTo(),Xmltosend);  
+				SimplePayload payload = new SimplePayload("message", "pubusb:node_p"+recMsg.getData().getTo(),Xmltosend);
 				Item payloadItem = new PayloadItem(null, payload);
 				nodeToPublish.publish(payloadItem);
 				
 				
-				System.out.println("CONAAA");
+				System.out.println("Publish Successful");
 
 			}
 
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (XMPPException e) {
-			e.printStackTrace();
-		}
-		
-
-	}
-
-	/*@Override
-	public void processMessage(Chat chat,
-			org.jivesoftware.smack.packet.Message messgage) {
-		if (messgage.getBody() == null) {
-			return;
-		}
-		StringTokenizer st = new StringTokenizer(messgage.getFrom(), "/");
-		Message sndMsg = new Message("publish", new Data(st.nextToken(), messgage.getBody(),""));
-
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			connection.sendMessage(mapper.writeValueAsString(sndMsg));
-		} catch (JsonGenerationException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (XMPPException | IOException e) {
 			e.printStackTrace();
 		}
 
-	}*/
-	
+    }
+
 class ItemEventCoordinator  implements ItemEventListener {
 	public void handlePublishedItems(ItemPublishEvent items) {
 		ObjectMapper mapper = new ObjectMapper();
