@@ -65,7 +65,7 @@ MessageListener{
 
 	public void onOpen(Connection arg0) {
 		this.connection = arg0;
-		System.out.println("Open");
+		System.out.println("Open v0");
 	}
 
 	public void onClose(int arg0, String arg1) {

@@ -15,12 +15,18 @@ public class Data {
 	@JsonProperty("text")
 	private String text;
 
+	public Data() {
+		super();
+	}
+
 	public Data(int to, String text) {
+		super();
 		this.to= to;
 		this.text = text;
 	}
 
 	public Data(String token, String server){
+		super();
 		this.token = token;
 		this.server = server;
 	}
