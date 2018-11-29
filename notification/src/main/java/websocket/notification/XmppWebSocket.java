@@ -1,6 +1,8 @@
 package websocket.notification;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.CookieManager;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
@@ -113,13 +115,23 @@ MessageListener{
 
  				System.out.println(con.getResponseCode());
 
-                		String response = con.getResponseMessage();
+ 				String response = con.getResponseMessage();
+
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                StringBuffer content = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    content.append(inputLine);
+                }
+                in.close();
+
 				System.out.println(response);
 
-                		JsonElement jelement = new JsonParser().parse(response);
-                		JsonObject  jobject = jelement.getAsJsonObject();
-                		String id = jobject.get("id").getAsString();
-                		String pass = jobject.get("id").getAsString() + jobject.get("email").getAsString();
+				JsonElement jelement = new JsonParser().parse(response);
+				JsonObject  jobject = jelement.getAsJsonObject();
+				String id = jobject.get("id").getAsString();
+				String pass = jobject.get("id").getAsString() + jobject.get("email").getAsString();
 
 
 				talk.login(id,pass);
