@@ -135,6 +135,12 @@ public class XmppWebSocket implements WebSocket.OnTextMessage, MessageListener{
 					       for (int i = 0; i < ownernode.getItems().size(); i++) {
 						       ArrayList<String> frompayload = parseXml(ownernode.getItems().get(i).toString());
 						       System.out.println(frompayload.get(1) + " publicou " +frompayload.get(0)+" no teu perfil");
+						       Message sndMsg = new Message("publish", new Data(frompayload.get(1),frompayload.get(0)));
+						       try {
+			                       connection.sendMessage(mapper.writeValueAsString(sndMsg));
+			                   } catch (IOException e) {
+			                       e.printStackTrace();
+			                   }
 					       }
 
 				       } catch (XMPPException e) {
@@ -209,12 +215,6 @@ public class XmppWebSocket implements WebSocket.OnTextMessage, MessageListener{
 		       return content;
 
 	       }
-
-	       public void processMessage(org.jivesoftware.smack.packet.Message message) {
-		       // TODO Auto-generated method stub
-
-	       }
-
 	       public void processMessage(Chat chat, org.jivesoftware.smack.packet.Message message) {
 		       // TODO Auto-generated method stub
 
