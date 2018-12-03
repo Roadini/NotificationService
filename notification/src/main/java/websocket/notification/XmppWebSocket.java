@@ -138,11 +138,11 @@ public class XmppWebSocket implements WebSocket.OnTextMessage, MessageListener{
 						       Message sndMsg = new Message("publish", new Data(frompayload.get(1),frompayload.get(0)));
 						       try {
 			                       connection.sendMessage(mapper.writeValueAsString(sndMsg));
-			                       ownernode.deleteItem(ownernode.getItems().get(i).getId());
 			                   } catch (IOException e) {
 			                       e.printStackTrace();
 			                   }
 					       }
+					       ownernode.deleteAllItems();
 
 				       } catch (XMPPException e) {
 					       /*configure node properties*/
