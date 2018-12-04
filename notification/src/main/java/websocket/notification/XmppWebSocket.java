@@ -203,10 +203,13 @@ public class XmppWebSocket implements WebSocket.OnTextMessage, MessageListener{
 			       System.out.println(frompayload.get(1) + " publicou " +frompayload.get(0)+" no teu perfil");
                    try {
                        connection.sendMessage(mapper.writeValueAsString(sndMsg));
-                       
+			    	   ownernode.deleteItem(ownernode.getItems().get(0).getId());
                    } catch (IOException e) {
                        e.printStackTrace();
-                   }
+                   } catch (XMPPException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		       }
 
 	       }
