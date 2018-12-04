@@ -142,7 +142,12 @@ public class XmppWebSocket implements WebSocket.OnTextMessage, MessageListener{
 			                       e.printStackTrace();
 			                   }
 					       }
+					     
 					       ownernode.deleteAllItems();
+					       if (ownernode.getItems().size()>0) {
+					    	   ownernode.deleteItem(ownernode.getItems().get(0).getId());
+					       }
+					      
 
 				       } catch (XMPPException e) {
 					       /*configure node properties*/
