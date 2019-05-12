@@ -1,25 +1,26 @@
 # NotificationService
 
-Especificação de Endpoints e Websocket url para gestão de utilizadores e utilização do serviço PubSub, respectivamente
+Endpoints specification and Websocket url for user management and use of the PubSub service, respectively
 
 ## Openfire Server
 
-Utilização de XMPPServer Openfire
+XMPPServer Openfire
 
 ### Docker
 
-Instalaçao
+Instalation
 
 ```
 to do
 ```
 ## Openfire API
 
-Utilização do plugin RESTApi e User Service do servidor Openfire para gestão de utilizadores
 
-Basic Auth antes de ligação, username: admin / password: ___
+RESTApi Openfire client for user management
 
-### Adicionar utilizador
+Basic Auth before connection, username: admin / password: ___
+
+### Add user
 
 POST http://engserv-1-aulas.ws.atnog.av.it.pt/plugins/restapi/v1/users
 ```
@@ -30,11 +31,11 @@ POST http://engserv-1-aulas.ws.atnog.av.it.pt/plugins/restapi/v1/users
     "email": "user@example.com”
 }
 ```
-### Remover utilizador
+### Remove user
 
 DELETE http://engserv-1-aulas.ws.atnog.av.it.pt/plugins/restapi/v1/users/{username}
 
-### Alterar utilizador 
+### Update user
 PUT http://engserv-1-aulas.ws.atnog.av.it.pt/plugins/restapi/v1/users/{oldUsername}
 
 ```
@@ -49,13 +50,13 @@ PUT http://engserv-1-aulas.ws.atnog.av.it.pt/plugins/restapi/v1/users/{oldUserna
 
 ### Docker
 
-Executar
+Execute
 
 ```
 $docker run -p 8040:8040 notification:final
 ```
 
-### Efectuar Log in e get de mensagens offline
+### Log in and get messages offline
 
 URL:ws://localhost:8040/websocket
 
@@ -69,7 +70,7 @@ URL:ws://localhost:8040/websocket
              }
 }
 ```
-### Publicar texto em tópico
+### Publish in topic
 
 URL:ws://localhost:8040/websocket
 
